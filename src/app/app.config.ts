@@ -11,5 +11,6 @@ export const appConfig: ApplicationConfig = {
      provideRouter(routes),
       provideClientHydration(withEventReplay()),
       { provide: BASE_URL, useValue: 'http://10.252.252.21:8000' }
+      
     ]
 };
