@@ -2,7 +2,7 @@
 import { Component, ElementRef, HostListener, inject, ViewChild, NgModule } from '@angular/core';
 //import { ArticleListComponent } from '../article-list/article-list.component';
 import { RouterLink } from '@angular/router';
-import { Router } from '@angular/router'; 
+import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { NgFor, NgIf } from '@angular/common';
 import { ArticleService } from '../../services/article.service';
@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-header',
   imports: [RouterLink, NgIf, FormsModule, NgFor],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  styleUrl: './header.component.css',
 })
 export class HeaderComponent {
   @ViewChild('searchInput') eRef!: ElementRef;
@@ -30,11 +30,11 @@ export class HeaderComponent {
   hasError : boolean = false;
 
 
-  ngOnInit(){
-    if(localStorage.getItem('token')){
-      this.isConnected = true
-      this.name = localStorage.getItem('name')??""
-      this.email = localStorage.getItem('email')??""
+  ngOnInit() {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      this.isConnected = !!localStorage.getItem('token');
+      this.name = localStorage.getItem('name') || '';
+      this.email = localStorage.getItem('email') || '';
     }
   }
   async onSearch() {
@@ -67,7 +67,7 @@ export class HeaderComponent {
     localStorage.clear();
     this.isConnected = true;
     this.route.navigate(['/']).then(() => {
-        window.location.reload();
-    });
-  }
+      window.location.reload();
+    });
+  }
 }

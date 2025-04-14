@@ -11,8 +11,9 @@ import { RegisterComponent } from './pages/register/register.component';
 import { TagListComponent } from './pages/tag-list/tag-list.component';
 import { CreateTagComponent } from './pages/create-tag/create-tag.component';
 import { EditArticleComponent } from './pages/edit-article/edit-article.component';
-import { ArticleByCategoryComponent } from './pages/article-by-category/article-by-category.component';
 import { HomeComponent } from './pages/home/home.component';
+import { ArticleByCategorieComponent } from './pages/article-by-categorie/article-by-categorie.component';
+import { ArticleByTagComponent } from './pages/article-by-tag/article-by-tag.component';
 
 export const routes: Routes = [
   {
@@ -65,10 +66,10 @@ export const routes: Routes = [
   },
   {
     path : 'categories/:id',
-    component : ArticleByCategoryComponent
+    component : ArticleByCategorieComponent
   },
   {
     path : 'tags/:id',
-    component : ArticleByCategoryComponent
+    component : ArticleByTagComponent
   }
 ];

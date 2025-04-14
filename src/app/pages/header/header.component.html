@@ -1,11 +1,15 @@
 <header class="w-full bg-white shadow-md">
   <div class="max-w-7xl mx-auto flex items-center justify-between p-4">
 
+    <!-- Logo et barre de recherche -->
     <div class="flex items-center">
-      <img src="https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/21_Angular_logo_logos-512.png"
-        alt="Angular Logo" class="w-14 h-14">
+      <img 
+        src="https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/21_Angular_logo_logos-512.png" 
+        alt="Angular Logo" 
+        class="w-14 h-14"
+      >
+      
     </div>
-
     <div class="mt-4 flex justify-end relative">
       <div class="flex w-full lg:max-w-[500px] rounded-full border border-gray-400 bg-gray-100 px-3 cursor-pointer"
         (click)="isModalOpen = true">
@@ -20,20 +24,19 @@
       </div>
     </div>
 
-   
+    <!-- Modal de recherche -->
     <div *ngIf="isModalOpen"
       class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white bg-opacity-80 backdrop-blur-sm px-4">
-      
+
       <h1 class="text-4xl md:text-5xl font-semibold text-gray-800 mb-6 text-center tracking-tight">
         Rechercher un article
       </h1>
 
-     
       <div class="bg-white w-full max-w-xl rounded-xl shadow-lg p-6 relative">
         <button (click)="isModalOpen = false"
           class="absolute top-2 right-2 text-gray-600 hover:text-black text-2xl">×</button>
 
-      
+        <!-- Input -->
         <div class="flex w-full rounded-full border border-gray-300 bg-gray-100 px-3">
           <input #searchInput type="text" class="w-full bg-transparent px-3 py-2 text-gray-700 outline-none"
             placeholder="Rechercher un article" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" />
@@ -45,32 +48,35 @@
           </button>
         </div>
 
-       
+        <!-- Loader -->
         <div *ngIf="isLoading" class="mt-4 text-center text-gray-500">
           Chargement des résultats...
         </div>
 
+        <!-- Résultats -->
         <div *ngIf="searchResults.length > 0 && !isLoading"
           class="mt-4 max-h-[300px] overflow-y-auto border border-gray-300 shadow rounded-lg">
           <ul>
-            <a *ngFor="let article of searchResults" [routerLink]="['/article', article.id]"
-              class="block hover:bg-gray-100 border-b last:border-b-0 px-4 py-2">
-              <div class="flex items-center space-x-4">
-                <img [src]="article.photo" class="w-16 h-16 object-cover rounded-lg" />
-                <span class="text-gray-800 hover:text-red-500 flex-1">
-                  {{ article.title }}
-                </span>
-              </div>
-            </a>
+            <li *ngFor="let article of searchResults">
+              <a [routerLink]="['/article', article.id]"
+                class="block hover:bg-gray-100 border-b last:border-b-0 px-4 py-2">
+                <div class="flex items-center space-x-4">
+                  <img [src]="article.photo" class="w-16 h-16 object-cover rounded-lg" />
+                  <span class="text-gray-800 hover:text-red-500 flex-1">
+                    {{ article.title }}
+                  </span>
+                </div>
+              </a>
+            </li>
           </ul>
         </div>
 
-       
+        <!-- Erreur -->
         <div *ngIf="hasError && !isLoading" class="mt-4 text-center text-red-600 font-medium">
           Une erreur est survenue pendant la recherche. Veuillez réessayer.
         </div>
 
-       
+        <!-- Aucun résultat -->
         <div *ngIf="searchResults.length === 0 && searchQuery && !isLoading && !hasError"
           class="mt-4 text-center text-gray-500 italic">
           Aucun article trouvé.
@@ -78,55 +84,54 @@
       </div>
     </div>
 
+    <!-- Navigation -->
+    <ul class="flex items-center space-x-6">
+      <li>
+        <a [routerLink]="['']" class="text-gray-700 hover:text-red-500 transition font-medium">
+          Home
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/articles']" class="text-gray-700 hover:text-red-500 transition font-medium">
+          Articles
+        </a>
+      </li>
+      <li *ngIf="isConnected">
+        <a [routerLink]="['/categories']" class="text-gray-700 hover:text-red-500 transition font-medium">
+          Catégories
+        </a>
+      </li>
+      <li *ngIf="isConnected">
+        <a [routerLink]="['/tags']" class="text-gray-700 hover:text-red-500 transition font-medium">
+          Tags
+        </a>
+      </li>
 
-
-
-
-    <nav *ngIf="isConnected">
-      <ul class="flex space-x-8">
-        <li>
-          <a [routerLink]="['']" class="text-gray-700 hover:text-red-500 transition font-medium">
-            Home
-          </a>
-        </li>
-        <li>
-          <a [routerLink]="['/articles']" class="text-gray-700 hover:text-red-500 transition font-medium">
-            Articles
-          </a>
-        </li>
-        <li>
-          <a [routerLink]="['/categories']" class="text-gray-700 hover:text-red-500 transition font-medium">
-            Catégories
-          </a>
-        </li>
-        <li>
-          <a [routerLink]="['/tags']" class="text-gray-700 hover:text-red-500 transition font-medium">
-            Tags
-          </a>
-        </li>
+      <!-- Si connecté -->
+      <ng-container *ngIf="isConnected; else guestLinks">
         <li>
           <a (click)="deconnexion()"
-            class="text-white bg-blue-700  focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5 dark:bg-red-600 focus:outline-none dark:focus:ring-blue-800">
+            class="text-white hover:bg-red-500 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5 dark:bg-red-600 focus:outline-none dark:focus:ring-blue-800 cursor-pointer">
             Déconnexion
           </a>
         </li>
         <li>
-          <button class="text-gray-700 hover:text-red-500 transition font-medium">{{name}}</button>
+          <div class="relative group">
+            <a [routerLink]="['/profile']"
+              class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 text-gray-700 hover:bg-red-500 hover:text-white transition text-lg font-bold"
+              title="Mon profil">
+              {{ name.charAt(0).toUpperCase() }}
+            </a>
+            <div
+              class="absolute top-12 left-1/2 -translate-x-1/2 bg-white shadow-lg rounded-xl px-4 py-2 text-sm text-gray-700 opacity-0 group-hover:opacity-100 transition duration-300 pointer-events-none group-hover:pointer-events-auto">
+              {{ name }}
+            </div>
+          </div>
         </li>
-      </ul>
-    </nav>
-    <nav *ngIf="!isConnected">
-      <ul class="flex space-x-8">
-        <li>
-          <a [routerLink]="['']" class="text-gray-700 hover:text-red-500 transition font-medium">
-            Home
-          </a>
-        </li>
-        <li>
-          <a [routerLink]="['/articles']" class="text-gray-700 hover:text-red-500 transition font-medium">
-            Articles
-          </a>
-        </li>
+      </ng-container>
+
+      <!-- Si non connecté -->
+      <ng-template #guestLinks>
         <li>
           <a [routerLink]="['/login']"
             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
@@ -135,12 +140,11 @@
         </li>
         <li>
           <a [routerLink]="['/register']"
-            class="text-white bg-blue-700  focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5 dark:bg-red-600 focus:outline-none dark:focus:ring-blue-800">
+            class="text-white bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5 dark:bg-red-600 focus:outline-none dark:focus:ring-blue-800">
             Register
           </a>
         </li>
-      </ul>
-    </nav>
-
+      </ng-template>
+    </ul>
   </div>
 </header>

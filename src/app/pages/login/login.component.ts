@@ -33,7 +33,7 @@ export class LoginComponent {
       .then((response: User) => {
         if (response.data) {
           localStorage.setItem('token', response.data.token);
-          localStorage.setItem('nom', response.data.name);
+          localStorage.setItem('name', response.data.name);
           localStorage.setItem('email', response.data.email);
           localStorage.setItem('userId', String(response.data.id));
 

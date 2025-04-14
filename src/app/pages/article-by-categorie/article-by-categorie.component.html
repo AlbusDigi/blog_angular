@@ -1,0 +1,110 @@
+<div>
+  <!-- En-tête -->
+  <div *ngIf="isConnected" class="flex justify-between items-center pt-4">
+    <h1 class="text-3xl font-bold underline">Articles de la catégorie</h1>
+  </div>
+
+  <div *ngIf="!isConnected" class="text-center items-center pt-4">
+    <h1 class="text-3xl font-bold underline">Articles de la catégorie</h1>
+  </div>
+
+  <br><br>
+
+  <!-- Liste des articles -->
+  <div *ngIf="articles && articles.length > 0"
+       class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+
+    <div *ngFor="let article of articles; trackBy: trackById">
+      <div
+        class="max-w-sm bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-200 transition-transform transform hover:-translate-y-1 hover:shadow-2xl duration-300 flex flex-col min-h-[32rem]"
+      >
+        <!-- IMAGE -->
+        <a [routerLink]="['/article', article.id]">
+          <img class="w-full h-44 object-cover"
+               [src]="article.photo"
+               [alt]="article.title" />
+        </a>
+
+        <!-- CONTENU -->
+        <div class="flex-1 p-5 flex flex-col justify-between">
+          <div class="space-y-3">
+            <!-- TAGS & CATEGORIES -->
+            <div class="flex flex-wrap gap-2">
+              <span *ngFor="let category of article.category"
+                    class="text-xs bg-indigo-100 text-indigo-700 font-semibold px-3 py-1 rounded-full">
+                {{ category.name }}
+              </span>
+              <span *ngFor="let tag of article.tags"
+                    class="text-xs bg-pink-100 text-pink-700 font-semibold px-3 py-1 rounded-full">
+                {{ tag.name }}
+              </span>
+            </div>
+
+            <!-- TITRE -->
+            <h3 class="text-lg font-extrabold text-gray-900 line-clamp-2">
+              {{ article.title }}
+            </h3>
+
+            <!-- CONTENU -->
+            <p class="text-sm text-gray-700 line-clamp-2">
+              {{ article.content }}
+            </p>
+          </div>
+
+          <!-- INFOS BASSES -->
+          <div class="mt-4">
+            <div class="flex items-center text-sm text-gray-500 space-x-2">
+              <img [src]="'https://ui-avatars.com/api/?name=' + article.auteur.name"
+                   class="w-6 h-6 rounded-full" />
+              <span>{{ article.auteur.name }}</span>
+              <span>•</span>
+              <span>{{ article.date_creation }}</span>
+            </div>
+
+            <!-- STATS -->
+            <div class="flex justify-between text-xs text-gray-400 mt-2">
+              <span>{{ article.nbr_vue }} vue(s)</span>
+              <span>{{ article.nbr_comment }} commentaire(s)</span>
+            </div>
+          </div>
+
+          <!-- ACTIONS -->
+          <div class="flex gap-2 mt-4">
+            <button
+              (click)="onLike()"
+              type="button"
+              class="bg-red-600 text-white px-3 py-1 rounded-lg text-xs font-medium transition hover:bg-red-700"
+            >
+              ❤ J'aime ({{ article.nb_likes }})
+            </button>
+
+            <a
+              *ngIf="isConnected && isAuthor"
+              [routerLink]="['/edit', article.id]"
+              class="px-3 py-1 bg-green-600 text-white text-xs font-medium rounded-lg hover:bg-green-700 transition"
+            >
+              ✏ Modifier
+            </a>
+
+            <a
+              [routerLink]="['/article', article.id]"
+              class="px-3 py-1 bg-blue-700 text-white text-xs font-medium rounded-lg hover:bg-blue-800 transition inline-flex items-center"
+            >
+              Voir plus
+              <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor"
+                   stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Message aucun article -->
+  <div *ngIf="articles && articles.length === 0" class="text-center mt-10 text-gray-500">
+    <p>Aucun article disponible dans cette catégorie.</p>
+  </div>
+</div>

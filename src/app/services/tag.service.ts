@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Tag } from '../models/tag';
 import { BASE_URL } from '../app.tokens';
+import { ArticleApi } from '../models/article-api';
 
 @Injectable({
   providedIn: 'root',
@@ -49,15 +50,22 @@ export class TagService {
     return await response.json();
   }
 
-  async getArticleByTag(id: number): Promise<any> {
-    let rep = await fetch(`${this.url}/api/tags/${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    // console.log(rep)
-    // console.log(rep);
-    return rep.json();
+
+
+  async getArticleByTag(id : number): Promise<ArticleApi[]> {
+      return fetch(`${this.url}/api/tags/${id}`)
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          }
+          return new Error('erreujrrrrrrrr');
+        })
+        .then((data) => {
+         return data.data;
+        //  return data
+        })
+        .catch((err) => {
+          console.log(err);
+        });
   }
 }
