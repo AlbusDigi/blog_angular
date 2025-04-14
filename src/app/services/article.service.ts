@@ -116,4 +116,22 @@ export class ArticleService {
 
     return await response.json();
   }
+
+async searchArticles(query: string): Promise<ArticleApi[]> {
+  const response = await fetch(`${this.url}/api/articles/search?search=${encodeURIComponent(query)}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Erreur lors de la recherche des articles');
+  }
+
+  const data = await response.json();
+  return data.data as ArticleApi[]; 
+}
+
+
 }
